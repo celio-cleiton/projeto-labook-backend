@@ -10,7 +10,8 @@ export class UserController {
         try {
             const input: GetUsersInput = {
                 q: req.query.q as string,
-            };
+                token: req.headers.authorization
+        };
 
             const output = await this.userBusiness.getUsers(input);
 

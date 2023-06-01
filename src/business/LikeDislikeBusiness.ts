@@ -3,7 +3,7 @@ import { PostDatabase } from "../database/postDataBase";
 import { EditPostLikesInputDTO, LikeDislike } from "../dtos/LikeDislikeDTO";
 import { BadRequestError } from "../errors/BadRequestError";
 import { NotFoundError } from "../errors/NotFoundError";
-import { Post } from "../models/Post";
+import { Post } from "../models/post";
 import { TokenManager } from "../services/TokenManager";
 import { TLikesdislikesDB } from "../types";
 

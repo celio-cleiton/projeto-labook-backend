@@ -17,9 +17,11 @@ export class UserBusiness {
     ) { }
 
     public getUsers = async (input: GetUsersInput): Promise<GetUsersOutput> => {
-        const { q } = input;
+        const { q, token } = input;
 
-        if (typeof q !== "string" && q !== undefined) {
+        const payload = this.tokenManager.getPayload(token)
+
+        if (!payload) {
             throw new BadRequestError("'q' deve ser uma string ou indefinido");
         }
 
@@ -54,12 +56,20 @@ export class UserBusiness {
             throw new BadRequestError("'email' deve ser uma string");
         }
 
+        const verifyEmail = await this.userDatabase.findUserByEmail(email)
+
+        if(verifyEmail){
+            throw new BadRequestError("'email' já cadastrado!");
+        }
+
         if (typeof password !== "string") {
             throw new BadRequestError("'password' deve ser uma string");
         }
 
         const id = this.idGenerator.generate();
         const hashedPassword = await this.hashManager.hash(password)
+        
+        console.log(hashedPassword)
 
         const newUser = new User(
             id,
@@ -71,7 +81,7 @@ export class UserBusiness {
         );
 
         const newUserDB = newUser.toDBModel();
-        await this.userDatabase.insertUser(newUserDB);
+        // await this.userDatabase.insertUser(newUserDB);
 
         const payload: TokenPayload = {
             id: newUser.getId(),
@@ -83,7 +93,7 @@ export class UserBusiness {
 
         const output: SignupOutput = {
             message: "Cadastro realizado com sucesso",
-            token,
+            token: token
         };
 
         return output;

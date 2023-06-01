@@ -99,7 +99,7 @@ export class PostBusiness {
         }
 
         if (payload.id !== postDB.creator_id) {
-            throw new ForbiddenError("Somente quem criou o post pode editá-lo");
+            throw new ForbiddenError("Somente quem criou o post pode editá-lo.");
         }
 
         const updatedAt = new Date().toISOString();
@@ -142,15 +142,15 @@ export class PostBusiness {
         }
 
         const creatorId = payload.id;
-
-        if (postDB.creator_id !== creatorId) {
-            throw new ForbiddenError("Somente o criador do post pode excluí-lo");
-        }
-
-        if (payload.role !== USER_ROLES.ADMIN) {
+        console.log(payload)
+        
+        if (payload.role === "NORMAL" && postDB.creator_id !== creatorId) {
             throw new ForbiddenError("Somente o administrador pode excluir o post");
         }
-
+        
+        // if (postDB.creator_id !== creatorId) {
+        //     throw new ForbiddenError("Somente o criador do post pode excluí-lo");
+        // }
         await this.postDatabase.deletePost(id);
     }
 }

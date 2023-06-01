@@ -36,7 +36,7 @@ DROP TABLE likes_dislikes;
 
 
 INSERT INTO users(id, name, email, password, role )
-VALUES("a01", "Cleiton", "celiocleion@gmail.com", "cleiton123", "ADMIN"),
+VALUES("a01", "Cleiton", "celiocleiton@gmail.com", "cleiton123", "ADMIN"),
 ("a02", "Roberto", "roberto@gmail.com", "roberto123", "NORMAL"),
 ("a03", "Carlos", "carlos@gmail.com", "carlos123", "NORMAL"),
 ("a04", "Roberto Carlos", "robertocarlos@gmail.com", "robertocarlos123", "NORMAL"), 

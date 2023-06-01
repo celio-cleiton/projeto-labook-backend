@@ -2,6 +2,7 @@ import { UserModel } from "../types";
 
 export interface GetUsersInput {
     q: string;
+    token: string;
 }
 
 export type GetUsersOutput = UserModel[];
@@ -26,3 +27,4 @@ export interface LoginOutput {
     message: string;
     token: string;
 }
+

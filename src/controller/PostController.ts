@@ -57,7 +57,7 @@ export class PostController {
             const input = this.postDTO.editPost(id, content, token);
             await this.postBusiness.editPost(input);
 
-            res.status(200).send("OK");
+            res.status(200).send("Conteúdo editado com sucesso");
         } catch (error) {
             console.log(error);
 
@@ -78,7 +78,7 @@ export class PostController {
 
             await this.postBusiness.deletePost(input);
 
-            res.status(200).end("OK");
+            res.status(200).end("Post Deletado com sucesso.");
         } catch (error) {
             console.log(error);
             if (error instanceof BaseError) {
