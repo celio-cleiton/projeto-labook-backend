@@ -19,11 +19,12 @@ export class UserBusiness {
     public getUsers = async (input: GetUsersInput): Promise<GetUsersOutput> => {
         const { q, token } = input;
 
+
         if (typeof q !== "string") {
             throw new BadRequestError("'q' deve ser uma string");
         }
+        const payload = this.tokenManager.getPayload(token)
 
-        const payload = this.tokenManager.getPayload(token);
 
         if (!payload) {
             throw new BadRequestError("Token inválido");
