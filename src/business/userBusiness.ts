@@ -19,13 +19,15 @@ export class UserBusiness {
     public getUsers = async (input: GetUsersInput): Promise<GetUsersOutput> => {
         const { q, token } = input;
 
-	if (typeof q !== "string") {
+
+        if (typeof q !== "string") {
             throw new BadRequestError("'q' deve ser uma string");
         }
         const payload = this.tokenManager.getPayload(token)
 
+
         if (!payload) {
-            throw new BadRequestError("'q' deve ser uma string ou indefinido");
+            throw new BadRequestError("Token inválido");
         }
 
         const usersDB = await this.userDatabase.findUsers();
@@ -61,7 +63,7 @@ export class UserBusiness {
 
         const verifyEmail = await this.userDatabase.findUserByEmail(email)
 
-        if(verifyEmail){
+        if (verifyEmail) {
             throw new BadRequestError("'email' já cadastrado!");
         }
 
@@ -71,7 +73,7 @@ export class UserBusiness {
 
         const id = this.idGenerator.generate();
         const hashedPassword = await this.hashManager.hash(password)
-        
+
         console.log(hashedPassword)
 
         const newUser = new User(
@@ -118,11 +120,11 @@ export class UserBusiness {
         if (!userDB) {
             throw new NotFoundError("'email' não encontrado");
         }
-        	// o password hasheado está no banco de dados
-		const hashedPassword = userDB.password
+        // o password hasheado está no banco de dados
+        const hashedPassword = userDB.password
 
         // o serviço hashManager analisa o password do body (plaintext) e o hash
-		const isPasswordCorrect = await this.hashManager.compare(password, hashedPassword)
+        const isPasswordCorrect = await this.hashManager.compare(password, hashedPassword)
 
         if (!isPasswordCorrect) {
             throw new BadRequestError("'email' ou 'password' incorretos");
