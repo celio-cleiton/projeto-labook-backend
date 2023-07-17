@@ -1,35 +1,36 @@
+import { BaseDatabase } from "./BaseDatabase";
 import { UserDB } from "../types";
-import { BaseDatabase } from "./BaseData";
-
 export class UserDatabase extends BaseDatabase {
-    public static TABLE_USERS = "users";
+    public static TABLE_USERS = "users"
 
-    public async findUsers() {
-        const result: UserDB[] = await BaseDatabase
-            .connection(UserDatabase.TABLE_USERS);
+    public getAllUsers= async()=>{
+        const userDB = await BaseDatabase
+        .connection(UserDatabase.TABLE_USERS)
+        .select()
 
-        return result;
+        return userDB
     }
 
-    public async findUserById(id: string) {
-        const [userDB]: UserDB[] | undefined[] = await BaseDatabase
-            .connection(UserDatabase.TABLE_USERS)
-            .where({ id });
-
-        return userDB;
-    }
-
-    public async findUserByEmail(email: string) {
-        const [userDB]: UserDB[] | undefined[] = await BaseDatabase
-            .connection(UserDatabase.TABLE_USERS)
-            .where({ email });
-
-        return userDB;
-    }
-
-    public async insertUser(newUserDB: UserDB) {
+    public async signUp(newUser:UserDB){
         await BaseDatabase
-            .connection(UserDatabase.TABLE_USERS)
-            .insert(newUserDB);
+        .connection(UserDatabase.TABLE_USERS)
+        .insert(newUser)
     }
+
+    public getUserByEmail = async (email: string):Promise<UserDB | undefined> =>{
+        const [userDB]:UserDB[] = await BaseDatabase
+        .connection(UserDatabase.TABLE_USERS)
+        .where({email})
+
+        return userDB
+    }
+
+    public getUserById = async (id: string):Promise<UserDB | undefined>=>{
+        const [userDB]:UserDB[] | undefined = await BaseDatabase
+        .connection(UserDatabase.TABLE_USERS)
+        .select().where({id:id})
+
+        return userDB
+    }
+
 }

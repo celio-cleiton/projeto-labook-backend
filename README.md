@@ -1,222 +1,199 @@
-# Projeto Labook - Turma C Barbosa Noturno.
-# Aluno:Célio Cleiton.
+# Labeddit
 
-Este é o projeto Labook, uma rede social com o objetivo de promover a conexão e interação entre pessoas. Os usuários cadastrados no aplicativo podem criar e curtir publicações.
+Projeto Labeddit desenvolvido por Célio Cleiton, Turma C Barbosa.
 
-Neste projeto, além das bases de criação de APIs e banco de dados, iremos focar na implementação de segurança e códigos mais escaláveis. Durante o prazo de entrega, abordaremos diversos conceitos e formas de desenvolvimento, seguindo padrões de design e arquitetura. O seu desafio será unir as funcionalidades com as boas práticas de código.
+Labeddit é uma plataforma de discussão e compartilhamento de conteúdo, onde os usuários podem criar postagens, comentar em postagens existentes, dar likes e dislikes, e interagir com outros usuários.
 
-## Conteúdos abordados
+## Tecnologias Utilizadas
 
-- NodeJS
-- Typescript
-- Express
-- SQL e SQLite
-- Knex
-- Programação Orientada a Objetos (POO)
-- Arquitetura em camadas
-- Geração de UUID
-- Geração de hashes
-- Autenticação e autorização
-- Roteamento
-- Postman
-endpoints: Documentação do [Postman](https://documenter.getpostman.com/view/24823231/2s93mBxekC)
+- Node.js
+- Express.js
+- Banco de Dados SQLite
+- Knex.js (Query Builder)
+- Autenticação JWT
 
-## Banco de dados
+## Configuração do Ambiente
 
-![projeto-labook (2)](https://user-images.githubusercontent.com/29845719/216036534-2b3dfb48-7782-411a-bffd-36245b78594e.png)
+1. Certifique-se de ter o Node.js instalado em sua máquina.
 
-Você pode visualizar o diagrama do banco de dados no seguinte link: [Diagrama do Banco de Dados](https://dbdiagram.io/d/63d16443296d97641d7c1ae1)
+2. Clone este repositório em sua máquina local:
 
-## Lista de requisitos
+   ```
+   git clone https://github.com/celiocleiton/labeddit.git
+   ```
 
-- Documentação Postman de todos os endpoints (obrigatória para correção)
+3. Acesse o diretório do projeto:
 
-- Endpoints
-    - [ ] signup
-    - [ ] login
-    - [ ] get posts
-    - [ ] create post
-    - [ ] edit post
-    - [ ] delete post
-    - [ ] like / dislike post
+   ```
+   cd labeddit
+   ```
 
-- Autenticação e autorização
-    - [ ] identificação UUID
-    - [ ] senhas hasheadas com Bcrypt
-    - [ ] tokens JWT
- 
-- Código
-    - [ ] POO
-    - [ ] Arquitetura em camadas
-    - [ ] Roteadores no Express
+4. Instale as dependências do projeto:
 
-- README.md
+   ```
+   npm install
+   ```
 
-## Exemplos de requisição
+5. Crie um arquivo `.env` na raiz do projeto e configure as seguintes variáveis de ambiente:
 
-### Signup
-Endpoint público utilizado para cadastro. Retorna um token JWT.
+   ```
+   DB_FILE_PATH=caminho/do/arquivo/database.sqlite
+   SECRET_KEY=sua-chave-secreta
+   ```
 
-```typescript
-// request POST /users/signup
-// body JSON
-{
-  "name": "Beltrana",
-  "email": "beltrana@email.com",
-  "password": "beltrana00"
-}
+6. Crie um arquivo de banco de dados SQLite vazio no caminho especificado pela variável `DB_FILE_PATH`.
 
-// response
-// status 201 CREATED
-{
-  token: "um token jwt"
-}
-```
+7. Execute as migrações do banco de dados:
 
-### Login
-Endpoint público utilizado para login. Retorna um token JWT.
-As senhas dos usuários e primeiro nome seguido de 123.
-```typescript
-// request POST /users/login
-// body JSON
-{
-  "email": "beltrana@email.com",
-  "password": "beltrana123"
-}
+   ```
+   npm run migrate
+   ```
 
-// response
-// status 200 OK
-{
-  token: "um token jwt"
-}
-```
+8. Inicie o servidor:
 
-### Get posts
-Endpoint protegido, requer um token JWT para acessá-lo.
+   ```
+   npm start
+   ```
 
-```typescript
-// request GET /posts
-// headers.authorization = "token jwt"
+9. O servidor estará rodando em `http://localhost:3003`.
 
-// response
-// status 200 OK
-[
+## Endpoints da API
+
+- `POST /users/register`: registra um novo usuário na plataforma.
+
+- `POST /users/login`: realiza o login de um usuário e retorna um token de autenticação.
+
+- `POST /posts`: cria uma nova postagem.
+
+- `POST /posts/:id/comments`: cria um novo comentário em uma postagem existente.
+
+- `PUT /posts/:id/like`: realiza uma curtida em uma postagem existente.
+
+- `PUT /posts/:id/dislike`: realiza uma descurtida em uma postagem existente.
+
+- `GET /posts`: retorna todas as postagens existentes na plataforma.
+
+- `GET /posts/:id`: retorna uma postagem específica, juntamente com seus comentários.
+
+## Exemplos de requisições
+
+Claro! Aqui estão alguns exemplos de como fazer as requisições no Postman para os endpoints da API:
+
+1. **Registro de usuário (`POST /users/signup`):**
+
+   - Método: POST
+   - URL: http://localhost:3003/users/signup
+   - Corpo da requisição (JSON):
+     ```json
+     {
+       "name": "Seu Nome",
+       "email": "seuemail@example.com",
+       "password": "suaSenha"
+     }
+     ```
+
+2. **Login de usuário (`POST /users/login`):**
+
+   - Método: POST
+   - URL: http://localhost:3003/users/login
+   - Corpo da requisição (JSON):
+     ```json
+     {
+       "email": "seuemail@example.com",
+       "password": "suaSenha"
+     }
+     ```
+
+   A resposta da requisição irá conter um token de autenticação, que você pode utilizar nas requisições subsequentes que exigem autenticação.
+
+3. **Criação de uma nova postagem (`POST /posts`):**
+
+   - Método: POST
+   - URL: http://localhost:3003/posts
+   - Cabeçalhos (Headers):
+     - Authorization: Bearer `<token>`
+       (Substitua `<token>` pelo token de autenticação recebido no login)
+   - Corpo da requisição (JSON):
+     ```json
     {
-        "id": "uma uuid v4",
-        "content": "Hoje vou estudar POO!",
-        "likes": 2,
-        "dislikes": 1,
-        "createdAt": "2023-01-20T12:11:47:000Z",
-        "updatedAt": "2023-01-20T12:11:47:000Z",
-        "creator
-
-": {
-            "id": "uma uuid v4",
-            "name": "Fulano"
-        }
-    },
-    {
-        "id": "uma uuid v4",
-        "content": "kkkkkkkkkrying",
-        "likes": 0,
-        "dislikes": 0,
-        "createdAt": "2023-01-20T15:41:12:000Z",
-        "updatedAt": "2023-01-20T15:49:55:000Z",
-        "creator": {
-            "id": "uma uuid v4",
-            "name": "Ciclana"
-        }
+        "content": "Conteúdo do Post",
+        "token": "Coloque seu token aqui"
     }
-]
-```
+     ```
 
-### Create post
-Endpoint protegido, requer um token JWT para acessá-lo.
+4. **Criação de um novo comentário em uma postagem (`POST /posts/:id`):**
 
-```typescript
-// request POST /posts
-// headers.authorization = "token jwt"
-// body JSON
-{
-    "content": "Partiu happy hour!"
-}
+   - Método: POST
+   - URL: http://localhost:3003/posts/:id
+     (Substitua `:id` pelo ID da postagem alvo)
+   - Cabeçalhos (Headers):
+     - Authorization: Bearer `<token>`
+       (Substitua `<token>` pelo token de autenticação recebido no login)
+   - Corpo da requisição (JSON):
+     ```json
+     {
+       "id_post": "Aqui coloca o id do post que desejar comentar",
+       "content": "Conteúdo do comentário aqui.",
+       "token": "Coloque seu token aqui"
+     }
+     ```
 
-// response
-// status 201 CREATED
-```
+5. **Curtida em uma postagem (`PUT /posts/:id/like`):**
 
-### Edit post
-Endpoint protegido, requer um token JWT para acessá-lo. Apenas o criador do post pode editá-lo, e somente o conteúdo pode ser editado.
+   - Método: PUT
+   - URL: http://localhost:3003/posts/:id/like
+     (Substitua `:id` pelo ID da postagem alvo)
+   - Cabeçalhos (Headers):
+     - Authorization: Bearer `<token>`
+       (Substitua `<token>` pelo token de autenticação recebido no login)
 
-```typescript
-// request PUT /posts/:id
-// headers.authorization = "token jwt"
-// body JSON
-{
-    "content": "Partiu happy hour lá no point de sempre!"
-}
+        - Corpo da requisição (JSON):
+     ```json
+     {
+       "like": 1,
+       "token": "Coloque seu token aqui"
+     }
+     ```
 
-// response
-// status 200 OK
-```
+6. **Descurtida em uma postagem (`PUT /posts/:id/dislike`):**
 
-### Delete post
-Endpoint protegido, requer um token JWT para acessá-lo. Apenas o criador do post pode deletá-lo. Administradores podem deletar o post de qualquer pessoa.
+   - Método: PUT
+   - URL: http://localhost:3003/posts/:id/dislike
+     (Substitua `:id` pelo ID da postagem alvo)
+   - Cabeçalhos (Headers):
+     - Authorization: Bearer `<token>`
+       (Substitua `<token>` pelo token de autenticação recebido no login)
 
-```typescript
-// request DELETE /posts/:id
-// headers.authorization = "token jwt"
+        - Corpo da requisição (JSON):
+     ```json
+     {
+       "like": 0,
+       "token": "Coloque seu token aqui"
+     }
+     ```
 
-// response
-// status 200 OK
-```
+7. **Listagem de todas as postagens (`GET /posts`):**
 
-### Like or dislike post (o mesmo endpoint faz as duas ações)
+   - Método: GET
+   - URL: http://localhost:3003/posts
+   - Cabeçalhos (Headers):
+     - Authorization: Bearer `<token>`
 
-Endpoint protegido, requer um token JWT para acessá-lo. O criador do post não pode dar like ou dislike no próprio post. 
+8. **Detalhes de uma postagem específica (`GET /posts/:id`):**
 
-Caso seja dado um like em um post que já tenha recebido like, o like é desfeito. Caso seja dado um dislike em um post que já tenha recebido dislike, o dislike é desfeito. 
+   - Método: GET
+   - URL: http://localhost:3003/posts/:id
+     (Substitua `:id` pelo ID da postagem alvo)
 
-Caso seja dado um like em um post que já tenha recebido dislike, o like sobrescreve o dislike. Da mesma forma, caso seja dado um dislike em um post que já tenha recebido like, o dislike sobrescreve o like.
+Lembre-se de substituir os valores entre colchetes (`[valor]`) pelas informações corretas ao realizar as requisições no Postman.
 
-#### Like (funcionalidade 1)
 
-```typescript
-// request PUT /posts/:id/like
-// headers.authorization = "token jwt"
-// body JSON
-{
-    "like": true
-}
+## Contribuição
 
-// response
-// status 200 OK
-```
+Contribuições para este projeto são bem-vindas. Se você encontrar algum problema ou tiver alguma sugestão de melhoria, sinta-se à vontade para abrir uma issue ou enviar um pull request.
 
-#### Dislike (funcionalidade 2)
+## Licença
 
-```typescript
-// request PUT /posts/:id/like
-// headers.authorization = "token jwt"
-// body JSON
-{
-    "like": false
-}
+Este projeto está licenciado sob a [MIT License](https://opensource.org/licenses/MIT).
 
-// response
-// status 200 OK
-```
-
-#### Tabela likes_dislikes
-- No SQLite, lógicas booleanas devem ser controladas através de 0 e 1 (INTEGER).
-- Quando o campo "like" possuir o valor 1 na tabela, significa que a pessoa deu like no post.
-    - Na requisição, quando "like" é true.
-    
-- Quando o campo "like" possuir o valor 0 na tabela, significa que a pessoa deu dislike no post.
-    - Na requisição, quando "like" é false.
-    
-- Caso não exista um registro na tabela de relação, significa que a pessoa não deu like nem dislike.
-- Caso seja dado like em um
-
- post que já tenha recebido like, o like é removido (o item é deletado da tabela).
-- Caso seja dado dislike em um post que já tenha recebido dislike, o dislike é removido (o item é deletado da tabela).
+---

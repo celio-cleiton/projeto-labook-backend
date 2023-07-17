@@ -1,60 +1,96 @@
-export enum USER_ROLES {
+export enum ROLE_USER{
     NORMAL = "NORMAL",
     ADMIN = "ADMIN"
 }
 
-export interface TokenPayload {
-    id: string,
-    name: string,
-    role: USER_ROLES
-}
-
-export interface UserDB {
+export interface UserDB{
     id: string,
     name: string,
     email: string,
     password: string,
-    role: USER_ROLES,
-    created_at: string
+    role: ROLE_USER,
+    created_at: string,
 }
 
-export interface UserModel {
+export interface PostDB{
     id: string,
-    name: string,
-    email: string,
-    password: string,
-    role: USER_ROLES,
-    createdAt: string
+    creator_id: string,
+    content: string,
+    comments: number,
+    likes: number,
+    dislikes: number,
+    created_at: string,
+    updated_at: string,
 }
-export interface TPostsDB {
+
+export interface CommentDB{
     id: string,
     creator_id: string,
     content: string,
     likes: number,
     dislikes: number,
     created_at: string,
-    updated_at: string
-
+    updated_at: string,
+    post_id: string,
 }
-export interface postModel {
+
+export interface CommentWithCreatorDB{
     id: string,
     content: string,
     likes: number,
     dislikes: number,
-    createdAt: string,
-    updatedAt: string
-
+    created_at: string,
+    updated_at: string,
+    post_id: string,
+    creator:{
+        creator_id: string,
+        name: string,
+    }
 }
 
-export interface PlaylistWithCreatorDB extends postModel {
-    creator_name: string
+export interface PostbyUsersDB{
+    id: string,
+    content: string,
+    comments: number,
+    likes: number,
+    dislikes: number,
+    created_at: string,
+    updated_at: string,
+    creator: {
+        id: string,
+        name: string,
+    }
 }
-export interface TLikesdislikesDB{
+
+export interface PostWithCommentsDB{
+    id: string,
+    content: string,
+    comments: number,
+    likes: number,
+    dislikes: number,
+    created_at: string,
+    updated_at: string,
+    creator: {
+        id: string,
+        name: string,
+    },
+    comments_post: CommentWithCreatorDB,
+}
+
+export interface LikeDislikeDB{
     user_id: string,
     post_id: string,
-    like: number
+    like: number,
 }
-export enum POST_LIKE {
-    ALREADY_LIKED = "ALREADY LIKED",
-    ALREADY_DISLIKED = "ALREADY DISLIKED"
+
+export interface LikeDislikeCommentDB{
+    user_id: string,
+    comment_id: string,
+    like: number,
+}
+
+export interface TokenPayload {
+    id: string,
+	name: string,
+    role: ROLE_USER
 }

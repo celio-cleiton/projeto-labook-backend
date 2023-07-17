@@ -1,72 +1,88 @@
 import { Request, Response } from "express";
 import { UserBusiness } from "../business/userBusiness";
-import { GetUsersInput, LoginInput, SignupInput } from "../dtos/userDTO";
-import { BaseError } from "../errors/BaseError";
+import { UserDTO } from "../dtos/userDTO";
 
-export class UserController {
-    constructor(private userBusiness: UserBusiness) { }
-
-    public getUsers = async (req: Request, res: Response): Promise<void> => {
+export class UserController{
+    constructor(
+        private userBusiness: UserBusiness,
+        private userDTO: UserDTO,
+    ){}
+    
+    public getAllUsers = async (req:Request, res: Response)=>{
         try {
-            const input: GetUsersInput = {
-                q: req.query.q as string,
-                token: req.headers.authorization
-        };
+            
+            const input ={
+                q:req.query.q as string,
+                token: req.headers.authorization as string
+            }           
 
-            const output = await this.userBusiness.getUsers(input);
-
-            res.status(200).send(output);
+            const output = await this.userBusiness.getAllUsers(input)
+            
+            res.status(201).send(output)
+            
         } catch (error) {
-            console.log(error);
-
-            if (error instanceof BaseError) {
-                res.status(error.statusCode).send(error.message);
+            console.log(error)
+    
+            if (req.statusCode === 200) {
+                res.status(500)
+            }
+    
+            if (error instanceof Error) {
+                res.send(error.message)
             } else {
-                res.status(500).send("Erro inesperado");
+                res.send("Erro inesperado")
             }
         }
-    };
+    }
 
-    public signup = async (req: Request, res: Response): Promise<void> => {
+    public signUp = async(req: Request, res: Response)=>{
         try {
-            const input: SignupInput = {
-                name: req.body.name,
-                email: req.body.email,
-                password: req.body.password,
-            };
+            const {name, email, password} = req.body
+            
+            const input = this.userDTO.signUp(name,email,password)
 
-            const output = await this.userBusiness.signup(input);
+            const output = await this.userBusiness.signUp(input)
 
-            res.status(201).send(output);
-        } catch (error) {
-            console.log(error);
+            res.status(201).send(output)
+                    
+            } catch (error) {
+                    console.log(error)
+                
+                    if (req.statusCode === 200) {
+                        res.status(500)
+                    }
+            
+                    if (error instanceof Error) {
+                        res.send(error.message)
+                    } else {
+                        res.send("Erro inesperado")
+                    }     
+                }
+    }
 
-            if (error instanceof BaseError) {
-                res.status(error.statusCode).send(error.message);
-            } else {
-                res.status(500).send("Erro inesperado");
-            }
-        }
-    };
-
-    public login = async (req: Request, res: Response): Promise<void> => {
+    public login = async(req: Request, res: Response)=>{
         try {
-            const input: LoginInput = {
-                email: req.body.email,
-                password: req.body.password,
-            };
 
-            const output = await this.userBusiness.login(input);
-
-            res.status(200).send(output);
+            const {email, password} = req.body
+            
+            const input = this.userDTO.login(email,password)
+            const output = await this.userBusiness.login(input)
+ 
+            res.status(201).send(output)
+            
         } catch (error) {
-            console.log(error);
-
-            if (error instanceof BaseError) {
-                res.status(error.statusCode).send(error.message);
-            } else {
-                res.status(500).send("Erro inesperado");
+            console.log(error)
+        
+            if (req.statusCode === 200) {
+                res.status(500)
             }
+    
+            if (error instanceof Error) {
+                res.send(error.message)
+            } else {
+                res.send("Erro inesperado")
+            }  
         }
-    };
+    }
+
 }

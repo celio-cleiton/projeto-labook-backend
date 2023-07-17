@@ -1,7 +1,7 @@
 {
-  "name": "projeto-labook-backend",
+  "name": "projeto-labddit-backend",
   "version": "1.0.0",
-  "description": "O Labook é um projeto back end, que permite às pessoas se conectarem e interagirem. Os usuários podem criar e curtir publicações, promovendo a troca de informações e experiências. A plataforma visa proporcionar um ambiente seguro e inclusivo para que os usuários expressem livremente suas opiniões e se conectem com outras pessoas ao redor do mundo.",
+  "description": "O Labddit é um projeto que permite às pessoas se conectarem e interagirem. Os usuários podem criar e curtir publicações, promovendo a troca de informações e experiências. A plataforma visa proporcionar um ambiente seguro e inclusivo para que os usuários expressem livremente suas opiniões e se conectem com outras pessoas ao redor do mundo.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,7 +14,7 @@
     "url": "git+https://github.com/celio-cleiton/projeto-labook-backend.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Cleiton",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/celio-cleiton/projeto-labook-backend/issues"
